@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Line Splitter</title>
+</head>
+<body>
+<header>
+<h1>Line Splitter</h1>
+</header>
+<main>
+	<label>Input text:</label><br>
+	<textarea id="original" rows="20" cols="140"></textarea><br>
+	<label>Max row length:</label>
+	<input id="max_row_length" type="text" value="160">
+	<button onclick="split_lines()">Split!</button><br>
+	<label>Output text:</label><br>
+	<textarea id="result" rows="20" cols="140"></textarea>
+</main>
+
+<script type="text/javascript">
+
+function output(string) {
+	const elem = document.querySelector("#result");
+	elem.value = string;
+}
+
+function split_lines() {
+	const original_text = document.querySelector("#original").value;
+	const max_len = parseInt(document.querySelector("#max_row_length").value);
+	if (isNaN(max_len)) {
+		output("Please enter a number for the maximum row length!");
+		return;
+	}
+	let words = original_text.split(" ");
+	let line_length = 0;
+	let res = "";
+	for(let i in words) {
+		let word = words[i];
+		line_length += word.length + 1;
+		res += word;
+		if (line_length >= max_len) {
+			res += "\n";
+			line_length = 0;
+		} else if (i != words.length-1) {
+			res += " ";
+		}
+	}
+	
+	output(res);
+}
+
+</script>
+</body>
+</html>
