@@ -33,17 +33,23 @@ function split_lines() {
 		return;
 	}
 	let words = original_text.split(" ");
-	let line_length = 0;
-	let res = "";
+	let line_length = words[0].length;
+	let res = words[0];
 	for(let i in words) {
 		let word = words[i];
-		line_length += word.length + 1;
-		res += word;
-		if (line_length >= max_len) {
+		if (line_length + word.length + 1 >= max_len) {
 			res += "\n";
 			line_length = 0;
 		} else if (i != words.length-1) {
 			res += " ";
+		}
+		res += word;
+		line_length += word.length + 1;
+	}
+	
+	for (r of res.split("\n")) {
+		if (r.length > max_len) {
+			console.log("Error!");
 		}
 	}
 	
