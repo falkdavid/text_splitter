@@ -2,11 +2,11 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>Text Splitter</title>
+<title>Line Splitter</title>
 </head>
 <body>
 <header>
-<h1>Text Splitter</h1>
+<h1>Line Splitter</h1>
 </header>
 <main>
 	<label>Input text:</label><br>
@@ -32,24 +32,17 @@ function split_lines() {
 		output("Please enter a number for the maximum row length!");
 		return;
 	}
-	let words = original_text.split(" ");
+	const words = original_text.split(" ");
 	let line_length = words[0].length;
 	let res = words[0];
-	for(let i in words) {
+	for(let i = 1; i < words.length; i++) {
 		let word = words[i];
-		if (line_length + word.length + 1 >= max_len) {
-			res += "\n";
-			line_length = 0;
-		} else if (i != words.length-1) {
-			res += " ";
-		}
-		res += word;
-		line_length += word.length + 1;
-	}
-	
-	for (r of res.split("\n")) {
-		if (r.length > max_len) {
-			console.log("Error!");
+		if (line_length + word.length > max_len) {
+			res += "\n" + word;
+			line_length = word.length;
+		} else {
+			line_length += word.length + 1;
+			res += " " + word;
 		}
 	}
 	
