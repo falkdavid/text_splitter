@@ -13,17 +13,36 @@
 	<main>
 		<label>Input text:</label><br>
 		<textarea id="original" rows="20" cols="140"></textarea><br>
-		<label>Max row length:</label>
-		<input id="max_row_length" type="text" value="160">
+
+		<input type="radio" name="break_method" id="break_after_n_char" checked>
+		<label>Break after</label>
+		<input id="max_row_length" type="text" value="160" size="10">
+		<label>characters.</label>
+
+		<input type="radio" name="break_method" id="break_after_sentence">
+		<label>Break after sentence.</label>
 		<input type="checkbox" id="replace_newline" name="replace_newline" checked>
-		<label for="replace_newline">Replace newlines</label>
+
+		<label for="replace_newline">Replace newlines.</label>
 		<button onclick="split_lines()">Split!</button>
 		<button onclick="clear_fields()">Clear</button><br>
 		<label>Output text:</label><br>
-		<textarea id="result" rows="20" cols="140"></textarea>
+		<textarea id="result" rows="20" cols="140"></textarea><br>
+		<button onclick="copy_output()">Copy to clipboard</button>
+		<button onclick="document.querySelector('#original').value=document.querySelector('#result').value;">Copy to
+			input</button>
 	</main>
 
 	<script type="text/javascript">
+
+		function copy_output() {
+			const orig_elem = document.querySelector("#original");
+			const result_elem = document.querySelector("#result");
+
+			result_elem.select();
+			orig_elem.value = orig_elem.value;
+			document.execCommand("copy");
+		}
 
 		function clear_fields() {
 			const orig_elem = document.querySelector("#original");
@@ -40,25 +59,41 @@
 		function split_lines() {
 			var original_text = document.querySelector("#original").value;
 			const max_len = parseInt(document.querySelector("#max_row_length").value);
-			const replace_newlines = document.querySelector("#replace_newline");
+			const replace_newlines = document.querySelector("#replace_newline").checked;
+			const break_after_sentence = document.querySelector("#break_after_sentence").checked;
+			const break_after_n_char = document.querySelector("#break_after_n_char").checked;
+
 			if (isNaN(max_len)) {
 				output("Please enter a number for the maximum row length!");
 				return;
 			}
-			if (replace_newlines.checked) {
+
+			/* Replace newlines */
+			if (replace_newlines) {
 				original_text = original_text.replace(/[\n]+/g, ' ');
 			}
-			const words = original_text.split(" ");
-			let line_length = words[0].length;
-			let res = words[0];
-			for (let i = 1; i < words.length; i++) {
-				let word = words[i];
-				if (line_length + word.length > max_len) {
-					res += "\n" + word;
-					line_length = word.length;
-				} else {
-					line_length += word.length + 1;
-					res += " " + word;
+
+			let res = "";
+			if (break_after_sentence) {
+				res = original_text.replace(/[.!?]\s+/g, ".\n");
+			}
+			else if (break_after_n_char) {
+				const lines = original_text.split("\n");
+				for (line of lines) {
+					const words = line.split(" ");
+					let line_length = words[0].length;
+					res += words[0];
+					for (let i = 1; i < words.length; i++) {
+						let word = words[i];
+						if (line_length + word.length > max_len) {
+							res += "\n" + word;
+							line_length = word.length;
+						} else {
+							line_length += word.length + 1;
+							res += " " + word;
+						}
+					}
+					res += "\n";
 				}
 			}
 
