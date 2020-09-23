@@ -15,6 +15,8 @@
 		<textarea id="original" rows="20" cols="140"></textarea><br>
 		<label>Max row length:</label>
 		<input id="max_row_length" type="text" value="160">
+		<input type="checkbox" id="replace_newline" name="replace_newline" checked>
+		<label for="replace_newline">Replace newlines</label>
 		<button onclick="split_lines()">Split!</button>
 		<button onclick="clear_fields()">Clear</button><br>
 		<label>Output text:</label><br>
@@ -36,11 +38,15 @@
 		}
 
 		function split_lines() {
-			const original_text = document.querySelector("#original").value;
+			var original_text = document.querySelector("#original").value;
 			const max_len = parseInt(document.querySelector("#max_row_length").value);
+			const replace_newlines = document.querySelector("#replace_newline");
 			if (isNaN(max_len)) {
 				output("Please enter a number for the maximum row length!");
 				return;
+			}
+			if (replace_newlines.checked) {
+				original_text = original_text.replace(/[\n]+/g, ' ');
 			}
 			const words = original_text.split(" ");
 			let line_length = words[0].length;
