@@ -1,54 +1,65 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<meta charset="utf-8">
-<title>Text Splitter</title>
+	<meta charset="utf-8">
+	<title>Text Splitter</title>
 </head>
+
 <body>
-<header>
-<h1>Text Splitter</h1>
-</header>
-<main>
-	<label>Input text:</label><br>
-	<textarea id="original" rows="20" cols="140"></textarea><br>
-	<label>Max row length:</label>
-	<input id="max_row_length" type="text" value="160">
-	<button onclick="split_lines()">Split!</button><br>
-	<label>Output text:</label><br>
-	<textarea id="result" rows="20" cols="140"></textarea>
-</main>
+	<header>
+		<h1>Text Splitter</h1>
+	</header>
+	<main>
+		<label>Input text:</label><br>
+		<textarea id="original" rows="20" cols="140"></textarea><br>
+		<label>Max row length:</label>
+		<input id="max_row_length" type="text" value="160">
+		<button onclick="split_lines()">Split!</button>
+		<button onclick="clear_fields()">Clear</button><br>
+		<label>Output text:</label><br>
+		<textarea id="result" rows="20" cols="140"></textarea>
+	</main>
 
-<script type="text/javascript">
+	<script type="text/javascript">
 
-function output(string) {
-	const elem = document.querySelector("#result");
-	elem.value = string;
-}
-
-function split_lines() {
-	const original_text = document.querySelector("#original").value;
-	const max_len = parseInt(document.querySelector("#max_row_length").value);
-	if (isNaN(max_len)) {
-		output("Please enter a number for the maximum row length!");
-		return;
-	}
-	const words = original_text.split(" ");
-	let line_length = words[0].length;
-	let res = words[0];
-	for(let i = 1; i < words.length; i++) {
-		let word = words[i];
-		if (line_length + word.length > max_len) {
-			res += "\n" + word;
-			line_length = word.length;
-		} else {
-			line_length += word.length + 1;
-			res += " " + word;
+		function clear_fields() {
+			const orig_elem = document.querySelector("#original");
+			const result_elem = document.querySelector("#result");
+			orig_elem.value = "";
+			result_elem.value = "";
 		}
-	}
-	
-	output(res);
-}
 
-</script>
+		function output(string) {
+			const elem = document.querySelector("#result");
+			elem.value = string;
+		}
+
+		function split_lines() {
+			const original_text = document.querySelector("#original").value;
+			const max_len = parseInt(document.querySelector("#max_row_length").value);
+			if (isNaN(max_len)) {
+				output("Please enter a number for the maximum row length!");
+				return;
+			}
+			const words = original_text.split(" ");
+			let line_length = words[0].length;
+			let res = words[0];
+			for (let i = 1; i < words.length; i++) {
+				let word = words[i];
+				if (line_length + word.length > max_len) {
+					res += "\n" + word;
+					line_length = word.length;
+				} else {
+					line_length += word.length + 1;
+					res += " " + word;
+				}
+			}
+
+			output(res);
+		}
+
+	</script>
 </body>
+
 </html>
