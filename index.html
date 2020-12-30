@@ -75,7 +75,7 @@
 
 			let res = "";
 			if (break_after_sentence) {
-				res = original_text.replace(/[.!?]\s+/g, ".\n");
+				res = original_text.replace(/(.!?)\s+/g, "$1\n");
 			}
 			else if (break_after_n_char) {
 				const lines = original_text.split("\n");
